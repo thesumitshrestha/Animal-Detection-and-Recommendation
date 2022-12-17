@@ -1,0 +1,61 @@
+<!--
+AUTHOR: "Ayush Dulal, Prashant G C, Prashant Purie, Raj Dhaubanjar, Sumit Shrestha"
+FILENAME: index.html
+SPECIFICATION: "Classfication and Detection of Animals in Image"
+FOR: "CS 5364 Information Retrieval Section 001" 
+-->
+
+<!-- Calling common.html template -->
+{% extends "common.html" %}
+
+<!-- Page Title -->
+{% block title %} <title> YOLOv5 Animal Detection </title> {% endblock %}
+
+
+<!-- Main Content -->
+{% block content %}
+<div class="m-2 container-fluid" style="height: 70vh">
+ 
+    <h2 class="mt-5 mx-5 mb-4"> Animal <span style="text-decoration: underline"> Detection </span></h2>
+  
+    <div class="card" style="width: 30rem; margin-left: 3rem; background-color: #baedff; border: 1px solid #41a8cf; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(5px);">
+        <div class="card-body">
+          
+          <h3 class="text-center p-2">Upload multiple images</h5> <br/>
+          
+          <p class="text-center"> Upload multiple images to detect animals <br/> (cat, deer, dog, elephant, tiger) </p>
+
+          <!-- Forms to upload image files  -->
+          <form method="post" action="" enctype="multipart/form-data">
+            <div class="my-4 px-5 mt-5">
+              <div class="form-group mb-2">
+                <label>Choose File</label>
+              </div>
+                <input class="form-control w-75 btn btn-secondary form-control-lg" type="file" name="file_list" id="file_list" multiple  required/>
+            </div>
+
+            <!-- Selecting custom model in default and seding it as hidden parameter -->
+            <select hidden class="form-select w-auto" name="model">
+              <option value="{{ model }}">{{ model }}</option>
+            </select>
+            <div class="my-2 px-5 mt-3">
+              <div class="form-group mb-2">
+                <label>Select Animal Class</label>
+              </div>
+
+              <!-- Dropdown to select the animal class for detection -->
+              <select class="form-select w-auto" style="height: 110px" multiple name="animal_class">
+                {% for animal in animal_class | sort() %}
+                <option style="width: 240px" selected value="{{ animal }}">{{ animal | title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            
+            <div class="d-flex justify-content-center mt-5 mb-3">
+              <button class="btn btn-outline-primary btn-lg w-75" type="submit">Submit</button>
+            </div>
+          </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+fastapi==0.88.0
+numpy==1.23.1
+opencv_python==4.5.5.64
+torch==1.12.1
+uvicorn==0.20.0

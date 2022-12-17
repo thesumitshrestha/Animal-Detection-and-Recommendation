@@ -1,0 +1,91 @@
+<!--
+AUTHOR: "Ayush Dulal, Prashant G C, Prashant Purie, Raj Dhaubanjar, Sumit Shrestha"
+FILENAME: display_result.html
+SPECIFICATION: "Classfication and Detection of Animals in Image"
+FOR: "CS 5364 Information Retrieval Section 001" 
+-->
+
+<!-- Calling common.html template -->
+{% extends "common.html" %}
+
+<!-- Page Title -->
+{% block title %} <title> Result - YOLOv5 Animal Detection </title> {% endblock %}
+
+<!-- Main Content -->
+{% block content %}
+
+<!-- CSS -->
+<style>
+  .recommended-image{
+    overflow: hidden;
+  }
+
+  .recommended-image img{
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<div class="container-fluid">
+  <!-- If no animal class is found in the uploaded files  -->
+  {% if error_text %}
+    <div class="container">
+      <h3 class="mb-5 mt-3"> Animal Detection Results</h3>
+      <h2 class="text-danger">
+        {{error_text}}
+      </h2>
+      <a href="/" class="btn btn-link px-0"> Search again?</a>
+    </div>
+
+  <!-- If any of the animal class is found in the uploaded files  -->
+  {% else %}
+    <h3 class="mb-5 mt-3"> Animal Detection Results</h3>
+    
+    <!-- Creating table for each animal class present in the image  -->
+    {% for img_base64, boundary_box_list in boundary_box_image_data_zipped %}
+    <div class="d-flex justify-content-space-between">
+      <table class="table mr-3 table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Animal</th>
+            <th>Bounding Box [x-center, y-center, height, width]</th>
+            <th>Confidence</th>
+          </tr>
+        </thead>
+    
+        <tbody>
+          {% for boundary_box in boundary_box_list %}
+          {% if boundary_box['class_name'] in label_list %}
+          <tr>
+            <td>{{ boundary_box['class_name'] }}</td>
+            <td>{{ boundary_box['boundary_box'] }}</td>
+            <td>{{ boundary_box['confidence'] }}</td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    
+      <!--Displaying base64 encoded image -->
+      <img class="d-flex justify-content-center ms-3" src="data:image/jpeg;charset=utf-8;base64,{{ img_base64 }}"
+        id="result_image" style="height: 450px; width: auto" />
+    </div>
+    <hr />
+    {% endfor %}
+    </div>
+    
+    <!--Displaying recomended images -->
+    <div class="container-fluid py-5">
+      <h2 class="mb-4 g-3" style="padding-left: .2rem"> Recommended Images for <span style="font-style: italic; "> {{
+          class_name }} </span></h2>
+      <div class="row m-0 p-0 g-3">
+        {% for rec in recommend_image %}
+        <div class="col col-3 recommended-image">
+          <img class="d-flex justify-content-center" src="{{rec}}" />
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
